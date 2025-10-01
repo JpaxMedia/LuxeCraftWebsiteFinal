@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Work | LuxeCraft Construction</title>
+    <!-- Google Fonts: Cormorant Garamond for headings, Montserrat for body -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #111111;
+            --primary: #1a1a1a;
+            --accent: #d4af37;
+            --text-light: #ffffff;
+            --text-muted: #cccccc;
+            --font-heading: 'Cormorant Garamond', serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(17, 17, 17, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 1rem 3rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: top 0.3s ease-in-out;
+        }
+
+        .navbar.navbar-hidden {
+            top: -100px;
+        }
+
+        .nav-logo { max-width: 150px; }
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+        
+        .mobile-menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--dark-bg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: left 0.4s ease-in-out;
+        }
+
+        .mobile-nav.open {
+            left: 0;
+        }
+
+        .mobile-nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.5rem;
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+        
+        .mobile-nav-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2.5rem;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .page-header {
+            position: relative;
+            height: 60vh; /* Made header much larger */
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        .header-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('photos/luxeworkheader (1) (1).png');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            transition: transform 0.2s ease-out; /* Added for zoom effect */
+        }
+        .header-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+        .page-header-content {
+            position: relative;
+            z-index: 3;
+            padding: 20px;
+        }
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: 4.5rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+        .page-subtitle {
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 10px auto 0;
+            font-weight: 300;
+            font-size: 1.2rem;
+        }
+        
+        .work-gallery {
+            padding: 80px 3rem;
+        }
+        .gallery-grid {
+            column-count: 3;
+            column-gap: 20px;
+        }
+        .gallery-item {
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            break-inside: avoid;
+            cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 85%;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            font-size: 3rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .footer { padding: 50px 3rem; text-align: center; border-top: 1px solid #222; background: #000; }
+        .footer-logo { max-width: 200px; margin-bottom: 20px; }
+        .footer-links a { color: var(--text-muted); margin: 0 15px; text-decoration: none; font-family: var(--font-body); text-transform: uppercase; }
+        .footer-socials { margin: 20px 0; }
+        .footer-socials a { color: var(--text-light); margin: 0 10px; font-size: 1.5rem; }
+        .footer p { color: #888; font-size: 0.9rem; }
+
+        @media (max-width: 1024px) {
+            .gallery-grid { column-count: 2; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu-toggle { display: block; }
+            .gallery-grid { column-count: 1; }
+            .page-header { height: 50vh; }
+            .page-title { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <a href="index.html"><img src="photos/luxecraftwhitewebsite.png" alt="LuxeCraft Logo" class="nav-logo"></a>
+        <div class="nav-links">
+            <a href="index.html#mission">Mission</a>
+            <a href="work.html" class="active">Work</a>
+            <a href="index.html#services">Services</a>
+            <a href="index.html#why-choose-us">Why Choose Us</a>
+            <a href="index.html#contact">Contact</a>
+        </div>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <button class="mobile-nav-close" id="mobile-nav-close">&times;</button>
+        <a href="index.html#mission">Mission</a>
+        <a href="work.html">Work</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#why-choose-us">Why Choose Us</a>
+        <a href="index.html#contact">Contact</a>
+    </div>
+
+    <main>
+        <header class="page-header">
+            <div class="header-bg" id="header-bg"></div>
+            <div class="header-overlay"></div>
+            <div class="page-header-content">
+                <h1 class="page-title">Our Work</h1>
+                <p class="page-subtitle">Explore our diverse range of completed projects showcasing our commitment to excellence and attention to detail.</p>
+            </div>
+        </header>
+
+        <section class="work-gallery">
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="photos/luxe1.png" alt="LuxeCraft Project 1"></div>
+                <div class="gallery-item"><img src="photos/luxe2.png" alt="LuxeCraft Project 2"></div>
+                <div class="gallery-item"><img src="photos/luxe3.png" alt="LuxeCraft Project 3"></div>
+                <div class="gallery-item"><img src="photos/luxe4.png" alt="LuxeCraft Project 4"></div>
+                <div class="gallery-item"><img src="photos/luxe5.png" alt="LuxeCraft Project 5"></div>
+                <div class="gallery-item"><img src="photos/luxe6.png" alt="LuxeCraft Project 6"></div>
+                <div class="gallery-item"><img src="photos/luxe7.png" alt="LuxeCraft Project 7"></div>
+                <div class="gallery-item"><img src="photos/luxe8.png" alt="LuxeCraft Project 8"></div>
+                <div class="gallery-item"><img src="photos/luxe9.png" alt="LuxeCraft Project 9"></div>
+                <div class="gallery-item"><img src="photos/luxe10.png" alt="LuxeCraft Project 10"></div>
+                <div class="gallery-item"><img src="photos/luxe11.png" alt="LuxeCraft Project 11"></div>
+                <div class="gallery-item"><img src="photos/luxe12.png" alt="LuxeCraft Project 12"></div>
+                <div class="gallery-item"><img src="photos/luxe13.png" alt="LuxeCraft Project 13"></div>
+                <div class="gallery-item"><img src="photos/luxe14.png" alt="LuxeCraft Project 14"></div>
+                <div class="gallery-item"><img src="photos/luxe15.png" alt="LuxeCraft Project 15"></div>
+                <div class="gallery-item"><img src="photos/luxe10 copy.png" alt="LuxeCraft Project 16"></div>
+                <div class="gallery-item"><img src="photos/luxe11 copy.png" alt="LuxeCraft Project 17"></div>
+            </div>
+        </section>
+    </main>
+
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" id="lightbox-close">&times;</span>
+        <img src="" alt="Enlarged project view" class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <footer class="footer">
+        <img src="photos/luxecraftwhitewebsite.png" alt="LuxeCraft Construction Logo" class="footer-logo">
+        <div class="footer-links">
+            <a href="index.html#mission">Mission</a>
+            <a href="work.html">Work</a>
+            <a href="index.html#services">Services</a>
+            <a href="index.html#contact">Contact</a>
+        </div>
+        <div class="footer-socials">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <p>© 2025 LuxeCraft Construction LLC. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const headerBg = document.getElementById('header-bg');
+            const navbar = document.getElementById('navbar');
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileNav = document.getElementById('mobile-nav');
+            const mobileNavClose = document.getElementById('mobile-nav-close');
+            const mobileNavLinks = mobileNav.querySelectorAll('a');
+            const galleryItems = document.querySelectorAll('.gallery-item img');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxClose = document.getElementById('lightbox-close');
+
+            // --- Scroll Effects ---
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', function() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (headerBg) {
+                    let scale = 1 + scrollTop / 2000;
+                    headerBg.style.transform = `scale(${scale})`;
+                }
+                if (scrollTop > lastScrollTop && scrollTop > navbar.offsetHeight){
+                    navbar.classList.add('navbar-hidden');
+                } else {
+                    navbar.classList.remove('navbar-hidden');
+                }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            }, false);
+
+            // --- Mobile Navigation ---
+            function openMobileMenu() { mobileNav.classList.add('open'); }
+            function closeMobileMenu() { mobileNav.classList.remove('open'); }
+            mobileMenuToggle.addEventListener('click', openMobileMenu);
+            mobileNavClose.addEventListener('click', closeMobileMenu);
+            mobileNavLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+
+            // --- Lightbox Gallery ---
+            galleryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    lightbox.classList.add('active');
+                    lightboxImg.src = item.src;
+                });
+            });
+
+            function closeLightbox() {
+                lightbox.classList.remove('active');
+            }
+
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

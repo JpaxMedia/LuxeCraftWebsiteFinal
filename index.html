@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxeCraft Construction | Modern Framers</title>
+    <!-- Google Fonts: Cormorant Garamond for headings, Montserrat for body -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #111111;
+            --primary: #1a1a1a;
+            --accent: #d4af37;
+            --text-light: #ffffff;
+            --text-muted: #cccccc;
+            --font-heading: 'Cormorant Garamond', serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(17, 17, 17, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 1rem 3rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: top 0.3s ease-in-out;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .navbar.navbar-hidden {
+            top: -100px; /* Hides the navbar */
+        }
+
+        .nav-logo { max-width: 150px; }
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-family: var(--font-body);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        .mobile-menu-toggle {
+            display: none; /* Hidden by default */
+            font-size: 1.8rem;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%; /* Start off-screen */
+            width: 100%;
+            height: 100vh;
+            background-color: var(--dark-bg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: left 0.4s ease-in-out;
+        }
+
+        .mobile-nav.open {
+            left: 0; /* Slide in */
+        }
+
+        .mobile-nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.5rem;
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+        
+        .mobile-nav-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2.5rem;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        .header {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden; 
+        }
+        .header-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('photos/luxeheaderfinal.png');
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.2s ease-out;
+        }
+        .header-overlay {
+            position: relative;
+            z-index: 1;
+            background: rgba(17, 17, 17, 0.6);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .header h1 {
+            font-family: var(--font-heading);
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            background: var(--accent);
+            color: var(--dark-bg);
+            padding: 15px 30px;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            text-transform: uppercase;
+            font-family: var(--font-body);
+        }
+        .cta-button:hover { background-color: #e5bf4a; }
+
+        .section { padding: 100px 3rem; overflow: hidden; }
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1rem;
+        }
+
+        .mission { background-color: var(--dark-bg); }
+        .services { background-color: var(--primary); }
+        .work-preview { background-color: var(--dark-bg); }
+        .why-choose-us { background-color: var(--primary); }
+        .contact { background-color: var(--dark-bg); }
+        .footer { background-color: #000; }
+        
+        .mission-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .mission-card { background-color: var(--primary); padding: 40px; border-radius: 5px; text-align: center; border: 1px solid #333; transition: transform 0.3s ease, border-color 0.3s ease; }
+        .mission-card:hover { transform: translateY(-10px); border-color: var(--accent); }
+        .mission-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
+        .mission-card h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 15px; }
+        .mission-card p { font-size: 1rem; color: var(--text-muted); }
+
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .service-item { background-color: var(--dark-bg); padding: 40px; border-radius: 5px; text-align: left; border: 1px solid #333; transition: transform 0.3s ease, border-color 0.3s ease; }
+        .service-item:hover { transform: translateY(-10px); border-color: var(--accent); }
+        .service-item i { font-size: 3rem; color: var(--accent); margin-bottom: 20px; }
+        .service-item h3 { font-family: var(--font-heading); font-weight: 700; font-size: 2.2rem; margin-bottom: 15px; }
+        .service-item p { font-size: 1rem; color: var(--text-muted); }
+
+        .work-preview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1400px; margin: 0 auto; }
+        .work-preview-item { overflow: hidden; border-radius: 5px; aspect-ratio: 4 / 3; }
+        .work-preview-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .work-preview-item:hover img { transform: scale(1.1); }
+        .view-portfolio-btn { text-align: center; margin-top: 40px; }
+
+        .why-choose-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .why-choose-card { background-color: var(--dark-bg); padding: 30px; border-radius: 5px; border: 1px solid #333; text-align: center; transition: transform 0.3s ease, border-color 0.3s ease; }
+        .why-choose-card:hover { transform: translateY(-10px); border-color: var(--accent); }
+        .why-choose-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
+        .why-choose-card h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
+        .why-choose-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.6; }
+
+        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: 1200px; margin: 0 auto; align-items: center; }
+        .contact-info h3 {
+            font-size: 2.5rem; /* Larger text */
+            margin-bottom: 30px; /* More space below */
+        }
+        .contact-info p { font-size: 1.1rem; margin-bottom: 20px; }
+        .contact-info a { color: var(--accent); text-decoration: none; }
+        .contact-form input, .contact-form textarea { width: 100%; padding: 15px; margin-bottom: 20px; background: #2a2a2a; border: 1px solid #444; border-radius: 5px; color: var(--text-light); font-family: var(--font-body); }
+        .contact-form button { width: 100%; background: var(--accent); color: var(--dark-bg); padding: 15px; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+
+        .footer { padding: 50px 3rem; text-align: center; border-top: 1px solid #222; }
+        .footer-logo { max-width: 200px; margin-bottom: 20px; }
+        .footer-links { margin-bottom: 20px; }
+        .footer-links a { color: var(--text-muted); margin: 0 15px; text-decoration: none; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 1px; }
+        .footer p { color: #888; font-size: 0.9rem; }
+
+        @media (max-width: 992px) {
+            .work-preview-grid { grid-template-columns: repeat(2, 1fr); }
+            .mission-grid { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links { display: none; } /* Hide desktop nav */
+            .mobile-menu-toggle { display: block; } /* Show hamburger */
+            .header h1 { font-size: 3rem; }
+            .section { padding: 80px 1.5rem; }
+            .contact-container { grid-template-columns: 1fr; }
+            .why-choose-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 576px) {
+            .work-preview-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <a href="index.html"><img src="photos/luxecraftwhitewebsite.png" alt="LuxeCraft Logo" class="nav-logo"></a>
+        <div class="nav-links">
+            <a href="index.html#mission">Mission</a>
+            <a href="work.html">Work</a>
+            <a href="index.html#services">Services</a>
+            <a href="index.html#why-choose-us">Why Choose Us</a>
+            <a href="index.html#contact">Contact</a>
+        </div>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <button class="mobile-nav-close" id="mobile-nav-close">&times;</button>
+        <a href="index.html#mission">Mission</a>
+        <a href="work.html">Work</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#why-choose-us">Why Choose Us</a>
+        <a href="index.html#contact">Contact</a>
+    </div>
+
+    <header class="header" id="header">
+        <div class="header-bg" id="header-bg"></div>
+        <div class="header-overlay">
+            <h1>LuxeCraft Construction</h1>
+            <p>Delivering skilled craftsmanship, dependable service, and top-tier framing expertise for builders and homeowners alike.</p>
+            <a href="#contact" class="cta-button">Get a Free Quote</a>
+        </div>
+    </header>
+
+    <section id="mission" class="section mission">
+        <h2 class="section-title">Our Mission</h2>
+        <p class="section-subtitle">We bring precision and passion to every project, ensuring your vision becomes a structurally sound and beautifully crafted reality.</p>
+        <div class="mission-grid">
+            <div class="mission-card">
+                <i class="fas fa-ruler-combined"></i>
+                <h3>Skilled Craftsmanship</h3>
+                <p>Every project showcases our commitment to precision and quality workmanship that stands the test of time.</p>
+            </div>
+            <div class="mission-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Dependable Service</h3>
+                <p>We deliver on our promises with reliable timelines and consistent communication throughout your project.</p>
+            </div>
+            <div class="mission-card">
+                <i class="fas fa-house-user"></i>
+                <h3>Framing Expertise</h3>
+                <p>Specialized in top-tier framing solutions that provide the solid foundation your vision deserves.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section services">
+        <h2 class="section-title">Our Premium Services</h2>
+        <p class="section-subtitle">From foundation to finish, we deliver exceptional quality that exceeds expectations.</p>
+        <div class="services-grid">
+            <div class="service-item">
+                <i class="fas fa-home"></i>
+                <h3>New Construction</h3>
+                <p>Custom homes and more, built with precision and care to create lasting value for your investment.</p>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-expand-arrows-alt"></i>
+                <h3>Additions & Expansions</h3>
+                <p>Seamlessly expand your living space with expert craftsmanship that flows with your existing home.</p>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-hammer"></i>
+                <h3>Full or Partial Remodels</h3>
+                <p>Transform your home with stunning, high-quality remodels with meticulous attention to detail.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="work-preview" class="section work-preview">
+        <h2 class="section-title">Recent Work</h2>
+        <p class="section-subtitle">A glimpse into our commitment to quality craftsmanship and attention to detail.</p>
+        <div class="work-preview-grid">
+            <div class="work-preview-item">
+                <img src="photos/luxe1.png" alt="Framing of a house interior">
+            </div>
+            <div class="work-preview-item">
+                <img src="photos/luxe2.png" alt="Roof framing from above">
+            </div>
+            <div class="work-preview-item">
+                <img src="photos/luxe4.png" alt="Construction crew working on a roof">
+            </div>
+            <div class="work-preview-item">
+                <img src="photos/luxe5.png" alt="Side view of a house addition">
+            </div>
+        </div>
+        <div class="view-portfolio-btn">
+            <a href="work.html" class="cta-button">View Full Portfolio</a>
+        </div>
+    </section>
+
+    <section id="why-choose-us" class="section why-choose-us">
+        <h2 class="section-title">Why Choose Us?</h2>
+        <p class="section-subtitle">Our commitment to excellence sets us apart.</p>
+        <div class="why-choose-grid">
+            <div class="why-choose-card">
+                <i class="fas fa-award"></i>
+                <h3>Quality Craftsmanship</h3>
+                <p>Our team's expertise ensures every cut is precise and every joint is solid, delivering lasting structural integrity.</p>
+            </div>
+            <div class="why-choose-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Dependable Service</h3>
+                <p>We honor our commitments, delivering on schedule and maintaining clear, consistent communication from start to finish.</p>
+            </div>
+            <div class="why-choose-card">
+                <i class="fas fa-hard-hat"></i>
+                <h3>Job Site Excellence</h3>
+                <p>We maintain clean, organized, and safe work sites to maximize efficiency and uphold professional standards.</p>
+            </div>
+            <div class="why-choose-card">
+                <i class="fas fa-comments"></i>
+                <h3>Transparent Communication</h3>
+                <p>You're always in the loop. We believe in open, honest dialogue throughout the entire construction process.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section contact">
+        <h2 class="section-title">Contact Us Today</h2>
+        <p class="section-subtitle">Ready to start your project? Contact us to schedule a free consultation and site evaluation.</p>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Get In Touch</h3>
+                <p><i class="fas fa-phone"></i> <a href="tel:+18645534755">(864) 553-4755</a></p>
+                <p><i class="fas fa-phone"></i> <a href="tel:+18644941252">(864) 494-1252</a></p>
+                <p><i class="fas fa-phone"></i> <a href="tel:+18649068312">(864) 906 8312</a></p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:luxecraftconstruction@outlook.com">luxecraftconstruction@outlook.com</a></p>
+                <p>Schedule a free consultation to discuss your vision and get expert recommendations.</p>
+            </div>
+            <form class="contact-form" name="contact" method="POST" data-netlify="true">
+                <input type="hidden" name="form-name" value="contact">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <img src="photos/luxecraftwhitewebsite.png" alt="LuxeCraft Construction Logo" class="footer-logo">
+        <div class="footer-links">
+            <a href="index.html#mission">Mission</a>
+            <a href="work.html">Work</a>
+            <a href="index.html#services">Services</a>
+            <a href="index.html#contact">Contact</a>
+        </div>
+        <p>© 2025 LuxeCraft Construction LLC. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const headerBg = document.getElementById('header-bg');
+            const navbar = document.getElementById('navbar');
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileNav = document.getElementById('mobile-nav');
+            const mobileNavClose = document.getElementById('mobile-nav-close');
+            const mobileNavLinks = mobileNav.querySelectorAll('a');
+
+            // --- Scroll Effects ---
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', function() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+                // Header Background Zoom Effect
+                if (headerBg) {
+                    let scale = 1 + scrollTop / 2000;
+                    headerBg.style.transform = `scale(${scale})`;
+                }
+
+                // Navbar Hide/Show on Scroll
+                if (scrollTop > lastScrollTop && scrollTop > navbar.offsetHeight){
+                    // Scroll Down
+                    navbar.classList.add('navbar-hidden');
+                } else {
+                    // Scroll Up
+                    navbar.classList.remove('navbar-hidden');
+                }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+            }, false);
+
+            // --- Mobile Navigation ---
+            function openMobileMenu() {
+                mobileNav.classList.add('open');
+            }
+
+            function closeMobileMenu() {
+                mobileNav.classList.remove('open');
+            }
+
+            mobileMenuToggle.addEventListener('click', openMobileMenu);
+            mobileNavClose.addEventListener('click', closeMobileMenu);
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
